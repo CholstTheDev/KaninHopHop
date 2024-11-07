@@ -5,7 +5,6 @@
 """
 import PySimpleGUI as sg
 import simulation as sim
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import game_settings as gs
 import analysis
 
@@ -190,12 +189,11 @@ def Sum_Victories_P(settings: gs.Simulation_Settings, summed_history: list):
     """
     Takes a list of summed game results from a list of lists and finds the chance of each players victories calculated after each game
     """
-    #summed_history = [[0]] * settings.player_count
     summed_history_p = [[] for _ in range(settings.player_count)]
 
     for x in range(0, len(summed_history)):
         for y in range(1, len(summed_history[x])):
-            summed_history_p[x].append(float(summed_history[x][y])/float(y))
+            summed_history_p[x].append(float(summed_history[x][y])/float(y)*100.0)
 
     return summed_history_p
 

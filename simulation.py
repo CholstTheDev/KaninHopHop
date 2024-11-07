@@ -28,12 +28,12 @@ def Single_Simulation(settings: gs.Simulation_Settings):
     player_scores = [0] * settings.player_count
     rabbit_counter = settings.rabbit_count
 
-    while rabbit_counter >= 0: # Game logic. Runs until there are no more rabbits
+    while rabbit_counter > 0: # Game logic. Runs until there are no more rabbits
         diceRoll = random.randint(0,5) 
 
         # if the roll is rabbit
         if diceRoll == 5:
-            if settings.variant == gs.Variant.NORMAL or gs.Variant.FAST: # in the first to variations (0 and 1 in the enum), the player is awarded a rabbit
+            if settings.variant == gs.Variant.NORMAL or settings.variant == gs.Variant.FAST: # in the first to variations (0 and 1 in the enum), the player is awarded a rabbit
                 player_scores[current_player] += 1
                 rabbit_counter -= 1
 
@@ -45,12 +45,15 @@ def Single_Simulation(settings: gs.Simulation_Settings):
                     rabbit_counter += 1
         # if the roll is not "rabbit"
         else:
-            if not rabbit_holes[diceRoll]: # Check if there is a rabbit in the hole
-                rabbit_holes[diceRoll] = True # If there isn't, no points are earned
-            else:
+            if rabbit_holes[diceRoll]: # Check if there is a rabbit in the hole
                 player_scores[current_player] += 1 # if there is, a single point is earned
+                rabbit_holes[diceRoll] = False
+                
+            else:
+                rabbit_holes[diceRoll] = True # If there isn't, no points are earned
+                rabbit_counter -= 1 #a rabbit is moved from the middle
+                
             
-            rabbit_counter -= 1
 
         current_player += 1 # The player counter is iterated
         if current_player >= settings.player_count:
