@@ -2,6 +2,9 @@
     Implementering af Monte Carlo simulering af børnespillet 'KaninHopHop' 
     
     Benytter PySimpleGUI til brugergrænseflade og matplotlib til visualisering
+
+    Github projekt:
+    https://github.com/CholstTheDev/KaninHopHop
 """
 import PySimpleGUI as sg
 import simulation as sim
