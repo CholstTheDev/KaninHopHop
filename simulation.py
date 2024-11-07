@@ -2,35 +2,18 @@
 import random
 import game_settings as gs
 
-SimSettings = gs.Simulation_Settings(simulation_iterations=1000, player_count=5)
 
-def Run_Simulations(settings: gs.Simulation_Settings) -> list:
+def Run_Simulations(settings: gs.Simulation_Settings, progress_callback: callable) -> list:
     """
     Returns list of winners. The length of the list is equal to simulation count.
     """
-    #sanity check
-    if not isinstance(settings.player_count, int):
-        print("You have to enter a whole number for the player count")
-        return
-    
-    if not (1 < settings.player_count <= 10):
-        print("Player count should be between 2 - 10")
-        return
-
-    if not isinstance(settings.rabbit_count, int):
-        print("You have to enter a whole number for the rabbit count")
-        return
-    
-    if not (1 <= settings.rabbit_count <= 100):
-        print("Rabbit count should be between 2 - 100")
-        return
-    
     #run simulations
     sim_counter = 0
     results = [] #A list of the winner. Sums can be created after the fact
     while sim_counter <= settings.simulation_iterations:
         results.append(Single_Simulation(settings))
         sim_counter += 1
+        progress_callback()
     
     #return game results as list of ints (single winner) and lists (multiple winners)
     return results
@@ -83,28 +66,3 @@ def Single_Simulation(settings: gs.Simulation_Settings):
         return winner_list
     else:
         return player_scores.index(highest_score)
-    
-
-def Tally_Simulations(settings: gs.Simulation_Settings, results: list):
-    """
-    Takes a list of results, and finds the sum of each players victories
-    """
-    player_scores = [0] * settings.player_count
-
-    for x in range(0, len(results)):
-        if isinstance(results[x], list):
-            for y in range(0, len(results[x])):
-                player_scores[results[x][y]] += 1
-        else:
-            player_scores[results[x]] += 1
-
-    print(player_scores)
-    for i in range(0,settings.player_count):
-        print(f"Player {i} won {player_scores[i]} times out of {settings.simulation_iterations} games. p = {player_scores[i]/settings.simulation_iterations}")
-
-
-#Tally_Simulations(SimSettings, Run_Simulations(SimSettings))
-
-#Run_Simulation(3, 20)
-
-
